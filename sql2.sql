@@ -23,3 +23,24 @@ values("prem","nallasopara",98574868595,"prem@123.com","1993-05-28",'production'
 insert into employee(name,city,contact_no,email,dob,dept,salary)
 values("alaam","naigaon",78486952522,"aalam@123.com","1991-05-28",'package',18000);
 -- truncate table
+-- truncate means clearing the table 
+show databases;
+use raj;
+show tables;
+select* from employee;
+-- 19 march 2026
+show databases;
+use classicmodels;
+show tables;
+select *from customers;
+-- where (condition) 
+-- and operator
+-- or operator
+-- signs =,>,<
+
+select * from customers where city = "NYC";
+select count(country) from customers where city = "NYC";
+-- when both condition are true use and operator
+select * from customers where country = "USA" and creditlimit > 100000;
+-- when one condtion are true use or operator
+select * from customers where country = "USA" or city = "NYC";
