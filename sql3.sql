@@ -37,12 +37,31 @@ select* from customers where state  like "n%";
 -- top list (limit)
 select* from customers limit 15;
 
--- order by
+-- order by/sorting
 select* from customers order by customerNumber asc;
 select* from customers order by customerNumber desc;
 
 select * from customers order by creditlimit asc limit 20;
 select * from customers order by creditlimit desc limit 20;
+
+-- 28 march 2026
+select count(country) as counted from customers;
+
+-- group by
+select country, count(country) as count_country from customers group by country;
+
+-- distinct keyword
+select distinct city from customers;
+select distinct country from customers;
+select count(country) from customers where country="usa";
+
+-- adding 10% tax on between 100000 to 300000
+select*from customers;
+use classicmodels;
+select customername,creditlimit,
+(creditlimit * 10/100) + creditlimit as updated_amount
+ from customers where creditlimit > 100000 and creditlimit < 300000;
+
 
 
 
