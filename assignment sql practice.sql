@@ -5,18 +5,18 @@
 show databases; 
  use raj;
 show tables;
- -- drop table authors;drop table books;
+ drop table authors;drop table books;
  create table Authors(
  author_id int auto_increment primary key,
- first_name varchar(100) not null,
- last_name varchar(100) not null,
+ first_name varchar(100) not null unique key,
+ last_name varchar(100) not null unique key,
  birth_year year,
  nationality varchar(100)
  );
  
   create table Books(
  book_id bigint auto_increment primary key,
- title varchar(100) not null,
+ title varchar(100) not null unique key,
  author_id bigint,
  publication_year year,
  genre varchar(100),
@@ -40,15 +40,15 @@ select*from Authors;
 -- Insert five books into the Books table, ensuring at least two books are by the same author
 INSERT INTO Books (title, author_id, publication_year, genre, price, stock) 
 VALUES
-('Python Basics',101,2020,'Programming',20.00,10);
+('Python Basics',1,2020,'Programming',20.00,10);
 INSERT INTO Books (title, author_id, publication_year, genre, price, stock) 
-VALUES('Python advance',101,2021,'Programming',20.00,10);
+VALUES('Python advance',2,2021,'Programming',20.00,10);
 INSERT INTO Books (title, author_id, publication_year, genre, price, stock) 
-VALUES('java script',105,2022,'languages',20.00,10);
+VALUES('java script',1,2022,'languages',20.00,10);
 INSERT INTO Books (title, author_id, publication_year, genre, price, stock) 
-VALUES('English',105,2021,'languages',20.00,10);
+VALUES('English',3,2021,'languages',20.00,10);
 INSERT INTO Books (title, author_id, publication_year, genre, price, stock) 
-VALUES('python',109,2025,'Programming',20.00,10);
+VALUES('python',5,2025,'Programming',20.00,10);
 
 select*from Books;
 -- Write a query to find all books priced between $15 and $25.
@@ -77,13 +77,15 @@ CREATE TABLE Customers (
 CREATE TABLE Orders (
     order_id INT  auto_increment PRIMARY KEY,
     customer_id INT,
-    book_id INT,
+    book_id bigint,
     order_date DATE NOT NULL,
     quantity INT CHECK (quantity > 0),
-    total_amount DECIMAL(10, 2) CHECK (total_amount >= 0)
+    total_amount DECIMAL(10, 2) CHECK (total_amount >= 0),
+    foreign key (customer_id) references customers(customer_id),
+    foreign key (book_id) references Books(book_id)
 );
 -- drop table customers;
--- drop table orders;
+ -- drop table orders;
 
 select * from customers;
 insert into customers(first_name,last_name,email,join_date)
@@ -102,11 +104,15 @@ insert into customers(first_name,last_name,email,join_date)
  
  INSERT INTO Orders (customer_id, book_id, order_date, quantity, total_amount)
 VALUES 
-(1, 101, '2023-03-01', 1, 22.99),
-(3, 104, '2023-04-15', 2, 35.50),
-(5, 102, '2023-05-10', 1, 19.99),
-(1, 105, '2023-07-21', 1, 14.99),
-(5, 103, '2024-01-05', 1, 25.50);
+(1, 1, '2023-03-01', 1, 22.99),
+(3, 4, '2023-04-15', 2, 35.50),
+(5, 2, '2023-05-10', 1, 19.99),
+(1, 5, '2023-07-21', 1, 14.99),
+(5, 3, '2024-01-05', 1, 25.50);
  select * from orders;
  -- Display all customers who joined in 2023 but haven't placed any orders.
-select*from customers where year(join_date)=2023 and customer_id not in ( select distinct customer_id from orders);
+select*from customers
+ where year(join_date)=2023 and customer_id not in ( select distinct customer_id from orders);
+ 
+ -- Advanced Questions (JOIN and GROUP BY)
+-- Show the total number of books sold for each author, including authors who haven't sold any books.
