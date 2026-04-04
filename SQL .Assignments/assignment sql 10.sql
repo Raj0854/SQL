@@ -116,3 +116,34 @@ select*from customers
  
  -- Advanced Questions (JOIN and GROUP BY)
 -- Show the total number of books sold for each author, including authors who haven't sold any books.
+select Authors.author_id,Authors.first_name,Authors.last_name,orders.quantity from authors left join books on  authors.author_id =books.author_id
+left join orders on books.book_id= orders.book_id;--  group by Authors.author_id,Authors.first_name,Authors.last_name,orders.quantity order by orders.quantity desc;
+SELECT 
+    a.author_id,
+    a.first_name,
+    a.last_name,
+    COALESCE(SUM(o.quantity), 0) AS total_books_sold
+FROM 
+    Authors a
+LEFT JOIN 
+    Books b ON a.author_id = b.author_id
+LEFT JOIN 
+    Orders o ON b.book_id = o.book_id
+GROUP BY 
+    a.author_id, a.first_name, a.last_name
+ORDER BY 
+    total_books_sold DESC;
+    
+    
+-- Find the top 3 customers who have spent the most money on books, showing their name and total spending.
+select customers.first_name,customers.last_name, sum(orders.total_amount) as total_spent from customers 
+left join orders on customers.customer_id = orders.customer_id group by customers.first_name,customers.last_name order by total_spent desc limit 3 ;
+
+
+--  List all books along with their authors' names where the book's price is above the average book price.
+select books.title , authors.first_name, authors.last_name  from books
+left join authors on books.author_id = authors.author_id where books.price >(select avg(price) from books)group by books.title  ;
+
+-- Show each genre and the number of books in that genre, but only for genres with more than 3 books.
+select books.genre from books where stock>3 group by genre;
+
