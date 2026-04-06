@@ -147,3 +147,32 @@ left join authors on books.author_id = authors.author_id where books.price >(sel
 -- Show each genre and the number of books in that genre, but only for genres with more than 3 books.
 select books.genre from books where stock>3 group by genre;
 
+-- Update the prices of all books in a specific genre by increasing them by 10%, but only if the current stock is less than 5.
+update books set price=price+(price*10/100) where genre = "programming" and stock < 5;
+
+--  Delete all orders that are more than a year old AND have a total_amount less than $10.
+delete from orders where date(order_date)< date_sub(curdate(), interval 1 year);
+
+--  Find authors who have written books in at least 3 different genres
+SELECT DISTINCT a.author_id, a.first_name, a.last_name
+FROM authors a
+JOIN books b ON a.author_id = b.author_id
+GROUP BY a.author_id, a.first_name, a.last_name
+HAVING COUNT(DISTINCT b.genre) >= 3;
+
+-- Create a summary showing for each month of 2023:
+-- Total number of orders
+-- Total revenue
+-- Best-selling book (by quantity)
+-- Number of unique customers
+
+
+-- NULL and Constraints Questions
+-- Find all books where either the genre is NULL or the price is NULL, but not both.
+select * from books where genre = null or price = null ;
+
+-- List customers who have placed orders but have NULL email addresses.
+select * from customers left join orders on customers.customer_id = orders.customer_id where customers.customer_id = orders.customer_id and email = null;
+
+-- Show all authors who have no books in the Books table
+select * from authors left join books on authors.author_id = books.book_id where authors.author_id != books.book_id;
