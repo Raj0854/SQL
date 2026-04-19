@@ -162,8 +162,13 @@ HAVING COUNT(DISTINCT b.genre) >= 3;
 
 -- Create a summary showing for each month of 2023:
 -- Total number of orders
+show tables;
+select * from orders;
+select sum(quantity) as no_of_orders from orders where year(order_date)=2023;
 -- Total revenue
+select sum(total_amount) as total_revenue from orders where year(order_date)=2023;
 -- Best-selling book (by quantity)
+select book_id as best_selling_book from orders where year(order_date)=2023  and  max(quantity) ;
 -- Number of unique customers
 
 
@@ -176,3 +181,6 @@ select * from customers left join orders on customers.customer_id = orders.custo
 
 -- Show all authors who have no books in the Books table
 select * from authors left join books on authors.author_id = books.book_id where authors.author_id != books.book_id;
+show databases;
+use raj;
+
