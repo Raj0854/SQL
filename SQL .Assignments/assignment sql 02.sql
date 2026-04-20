@@ -314,9 +314,63 @@ having count( distinct b.genre) >=3;
 
 -- =========================================
 -- Q.16 Create a summary showing for each month of 2023:
+select*from orders;
 -- Total number of orders
 -- Total revenue
 -- Best-selling book (by quantity)
 -- Number of unique customers
+SELECT 
+    DATE_FORMAT(order_date, '%Y-%m') AS month_year,
+    DATE_FORMAT(order_date, '%M %Y') AS month_name,
+    COUNT(*) AS total_orders,
+    sum(total_amount)as total_revenue
+FROM orders
+WHERE YEAR(order_date) = 2023
+  AND order_date IS NOT NULL
+GROUP BY DATE_FORMAT(order_date, '%Y-%m'), DATE_FORMAT(order_date, '%M %Y')
+ORDER BY month_year;
+-- =========================================
+-- Q.17 Find all books where either the genre is NULL or the price is NULL, but not both.
+-- =========================================
+SELECT * FROM BOOKS WHERE (GENRE IS NULL OR PRICE IS NULL) AND NOT (genre IS NULL AND price IS NULL);
+-- =========================================
+-- Q.18 List customers who have placed orders but have NULL email addresses.
+-- =========================================
+SELECT DISTINCT
+    c.customer_id,
+    c.first_name,
+    c.last_name,
+    c.email
+FROM customers c
+INNER JOIN orders o ON c.customer_id = o.customer_id
+WHERE c.email IS NULL
+ORDER BY c.first_name,
+c.last_name;
+-- =========================================
+-- Q.19 Show all authors who have no books in the Books table.
+-- =========================================
+SELECT 
+    a.author_id,
+    a.FIRST_name,
+    a.last_name
+FROM authors a
+LEFT JOIN books b ON a.author_id = b.author_id
+WHERE b.book_id IS NULL
+ORDER BY a.FIRST_name,
+a.last_name;
+-- =========================================
+-- Q.20 Find all books whose titles start with 'The' and end with either 'Guide' or 'Tutorial'
+-- =========================================
+SELECT 
+    book_id,
+    title,
+    genre,
+    price
+FROM books
+WHERE title LIKE 'The%' 
+  AND (title LIKE '%Guide' OR title LIKE '%Tutorial')
+ORDER BY title;
 -- =========================================
 -- =========================================
+
+
