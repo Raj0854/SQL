@@ -314,11 +314,11 @@ having count( distinct b.genre) >=3;
 
 -- =========================================
 -- Q.16 Create a summary showing for each month of 2023:
+-- =========================================
 select*from orders;
 -- Total number of orders
 -- Total revenue
--- Best-selling book (by quantity)
--- Number of unique customers
+-- =========================================
 SELECT 
     DATE_FORMAT(order_date, '%Y-%m') AS month_year,
     DATE_FORMAT(order_date, '%M %Y') AS month_name,
@@ -329,6 +329,37 @@ WHERE YEAR(order_date) = 2023
   AND order_date IS NOT NULL
 GROUP BY DATE_FORMAT(order_date, '%Y-%m'), DATE_FORMAT(order_date, '%M %Y')
 ORDER BY month_year;
+
+-- =========================================
+-- Best-selling book (by quantity)
+-- =========================================
+
+SELECT 
+    DATE_FORMAT(order_date, '%Y-%m') AS month_year,
+    DATE_FORMAT(order_date, '%M %Y') AS month_name,
+    COUNT(*) AS total_orders,
+    book_id,
+    sum(quantity)as total_sale
+FROM orders
+WHERE YEAR(order_date) = 2023
+  AND order_date IS NOT NULL
+GROUP BY DATE_FORMAT(order_date, '%Y-%m'), DATE_FORMAT(order_date, '%M %Y'),book_id
+ORDER BY book_id desc limit 1;
+
+-- =========================================
+-- Number of unique customers
+-- =========================================
+SELECT 
+    distinct customer_id, 
+    DATE_FORMAT(order_date, '%Y-%m') AS month_year,
+    DATE_FORMAT(order_date, '%M %Y') AS month_name
+FROM orders
+WHERE YEAR(order_date) = 2023
+  AND order_date IS NOT NULL
+GROUP BY DATE_FORMAT(order_date, '%Y-%m'), DATE_FORMAT(order_date, '%M %Y'),customer_id
+ORDER BY month_year;
+select * from orders;
+
 -- =========================================
 -- Q.17 Find all books where either the genre is NULL or the price is NULL, but not both.
 -- =========================================
@@ -367,10 +398,48 @@ SELECT
     genre,
     price
 FROM books
-WHERE title LIKE 'The%' 
-  AND (title LIKE '%Guide' OR title LIKE '%Tutorial')
+WHERE title like 'The%' 
+  AND (title like '%Guide' or title like '%Tutorial')
 ORDER BY title;
+
+
+select * from books;
+-- =========================================
+
+-- Q.21 List authors' full names (combined first and last name) ordered by last name, then first name
+-- =========================================
+select* from authors;
+SELECT concat(last_name," ",first_name ) as full_name from authors order by last_name asc;
+
+-- =========================================
+-- Q.22 Show the top 5 months with the highest average order amounts.
+-- =========================================
+
+select*from orders;
+select 
+	DATE_FORMAT(order_date, '%M %Y') AS month_name,
+	avg(total_amount) as avg_order_amount
+    from orders
+    group by DATE_FORMAT(order_date, '%M %Y')
+    order by  avg_order_amount desc limit 5;
+    
+-- =========================================
+-- Q.23 Write a query to identify potential duplicate customer records based on similar names and email patterns.
+-- =========================================
+SELECT *FROM CUSTOMERS;
+select *from customers group by customer_id, first_name,last_name, email;
+
+-- =========================================
+-- Q.24 Create a customer ranking system based on:
+-- Total money spent (50% weight)
+-- Number of orders (30% weight)
+-- Account age (20% weight)
+
+-- =========================================
+
+
 -- =========================================
 -- =========================================
+
 
 
