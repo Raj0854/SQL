@@ -442,4 +442,3 @@ select *from customers group by customer_id, first_name,last_name, email;
 -- =========================================
 
 
-
