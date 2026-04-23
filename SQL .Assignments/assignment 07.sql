@@ -150,3 +150,33 @@ ORDER BY EarliestHireDate ASC limit 1;
  select e.empid,e.firstname, e.lastname,e.department, count(p.projectid) as  total_projects from
  employees e join Employee_Project ep on e.empid =ep.empid join projects p  on ep.projectid=p.projectid 
  group by e.empid order by e.empid;
+ 
+ -- ===================================================================
+--  Q.16 Assume each department has a budget allocated for projects.
+--  Write a query to calculate the total budget used by each department based on employee hours worked.
+--  Assume each hour worked is billed at $50.
+ -- ===================================================================
+ select  d.departmentid,d.departmentname,sum(ep.hours_worked)as total_hours,sum(ep.hours_worked*50)as total_budget 
+ from departments d left join projects p on d.departmentid = p.departmentid left join employee_project ep on ep.projectid=p.projectid
+ group by d.departmentid,d.departmentname;
+ -- ===================================================================
+--  Q.17 Write a query to find employees who were hired on the same day.
+ -- ===================================================================
+ SELECT E.* FROM EMPLOYEES E 
+ JOIN (SELECT HIRE_DATE FROM EMPLOYEES GROUP BY HIRE_DATE HAVING COUNT(*)>1)DUP ON E.HIRE_DATE=DUP.HIRE_DATE;
+ -- ===================================================================
+--  Q.18 Write a query to calculate the total monthly salary expenditure for each department.
+ -- ===================================================================
+ SELECT DEPARTMENT,SUM(SALARY) AS TOTAL_SALARY FROM EMPLOYEES group by DEPARTMENT;
+ -- ===================================================================
+--  Q.19 Write a query to find the project with the maximum number of employees assigned to it.
+ -- ===================================================================
+ SELECT P.PROJECTID,P.PROJECTNAME,COUNT(EP.EMPID)AS NUMBER_OF_EMP
+ FROM PROJECTS P JOIN EMPLOYEE_PROJECT EP ON P.PROJECTID= EP.PROJECTID 
+ group by P.PROJECTID,P.PROJECTNAME
+ order by NUMBER_OF_EMP DESC LIMIT 1;
+ -- ===================================================================
+ -- Q.20 Write a query to identify any gaps in the employee IDs sequence.
+ -- ===================================================================
+ 
+ -- ===================================================================
