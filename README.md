@@ -89,7 +89,7 @@ SELECT * FROM employees WHERE salary > 50000;
 
 ---
 
-## 🔹 6. Joins (Very Important in Jobs 🚀)
+## 🔹 6. Joins 
 
 Used to combine tables:
 
