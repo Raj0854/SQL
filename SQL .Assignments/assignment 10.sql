@@ -436,9 +436,28 @@ select *from customers group by customer_id, first_name,last_name, email;
 -- Account age (20% weight)
 
 -- =========================================
-
+with c as(
+SELECT c.customer_id,c.first_name,SUM(o.total_amount) as totalspend,COUNT(o.order_id) totalorder,DATEDIFF(CURDATE(),c.join_date) age
+FROM Customers c LEFT JOIN Orders o ON c.customer_id=o.customer_id GROUP BY c.customer_id,c.first_name,c.join_date)
+SELECT *,RANK() OVER(ORDER BY (0.5*totalspend + 0.3*totalorder*100 + 0.2*age/30) DESC) AS rank_no
+FROM C;
 
 -- =========================================
+-- Q.25 Find books that have never been ordered together in the same order (pairs of books that have never appeared together).
+-- =========================================
+SELECT b1.book_id,b1.title
+FROM Books b1
+JOIN Books b2 
+ON b1.book_id < b2.book_id
+WHERE NOT EXISTS (
+    SELECT *
+    FROM Orders o1
+    JOIN Orders o2 
+    ON o1.order_id = o2.order_id
+    WHERE o1.book_id = b1.book_id
+      AND o2.book_id = b2.book_id
+) group by b1.book_id,b1.title
+;
 -- =========================================
 
 
