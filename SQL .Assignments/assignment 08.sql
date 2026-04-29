@@ -1,4 +1,4 @@
--- Create a database named CompanyDB and add the following tables:
+  -- Create a database named CompanyDB and add the following tables:
 
 show databases;
 create database companyDB;
@@ -77,5 +77,11 @@ select * from HighEarnerEmployees;
 -- ============================================================
 -- Q.8 Write a query using a common table expression (CTE) to find employees who report to the same department and have salaries greater than the average salary of that department.
 -- ============================================================
-
+SELECT e.firstname, e.lastname,d.department_id,d.department_name,avg(e.salary)as average_salary 
+from employees e left join department d on e.department_id= d.department_id 
+where e.salary > (
+    SELECT AVG(Salary)
+    FROM Employees
+    WHERE Department_ID = e.Department_ID
+) group by d.department_id,e.firstname, e.lastname,d.department_name;
 -- ============================================================
